@@ -1,30 +1,29 @@
 from collections import Counter
-from ._types import reading_types
 import os
+from ._types import reading_types
+from ._txt_parse import _txt_read
+from ._pdf_parse import _pdf_read
 
 
-def _read(fn: str) -> dict:
-    ext = os.path.splitext(fn)[-1]
+def _find_type(fn: str) -> str:
+  ext = os.path.splitext(fn)[-1]
 
-    if ext in reading_types.keys():
-        read_type = reading_types[ext]
+  if ext in reading_types.keys():
+    read_type = reading_types[ext]
 
-    f_content = open(fn, read_type).read().split()
-
-    return f_content, read_type, ext
-
-
-def _count(data: list) -> Counter:
-    c = Counter(data)
-    return c
+  return read_type, ext
 
 
 def utils_main(filename):
-    fc, rt, ext = _read(filename)
-    _ret = _count(fc)
+  # find file ext
+  rt, ext = _find_type(filename)
+  print("rt: ", rt, "ext: ", ext)
 
-    return {
-        "content": _ret,
-        "file_extension": ext,
-        "read_type": rt
-    }
+  _ret = lambda x: Counter(x)(open(filename, rt))
+  print("ret:", _ret)
+
+  return {
+      "content": _ret,
+      "file_extension": ext,
+      "read_type": rt
+  }

@@ -7,9 +7,6 @@ from utils.text_parser.text import text
 from utils.logger import _log
 from utils.count import counter
 
-
-
-
 allowed_extensions = {
   'pdf': pdf,
   'jpeg': image, 'png': image, 'jpg': image,
@@ -18,7 +15,6 @@ allowed_extensions = {
 }
 
 exts, vals = allowed_extensions.keys(), allowed_extensions.values()
-
 
 def _find_ext_n_run(fp): 
   ext = fp.split(os.extsep)[-1]
@@ -34,7 +30,6 @@ def _find_ext_n_run(fp):
 
     return ret
     
-
 
 # if __name__ == '__main__':
 #  import sys

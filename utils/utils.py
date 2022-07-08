@@ -1,9 +1,10 @@
 
 import os
-from html_parser.html import html
-from image_parser.image import image
-from pdf_parser.pdf import pdf
-from text_parser.text import text
+from utils.html_parser.html import html
+from utils.image_parser.image import image
+from utils.pdf_parser.pdf import pdf
+from utils.text_parser.text import text
+
 
 
 
@@ -15,6 +16,10 @@ allowed_extensions = {
 }
 
 exts, vals = allowed_extensions.keys(), allowed_extensions.values()
+
+def allowed_file(filename):
+  return '.' in filename and \
+    filename.rsplit('.', 1)[1] in exts
 
 def _find_ext_n_run(fp): 
   ext = fp.split(os.extsep)[-1]

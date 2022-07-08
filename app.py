@@ -1,5 +1,7 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
+from flask_cors import CORS
+
 from werkzeug.utils import secure_filename
 
 from utils.utils import _find_ext_n_run, exts
@@ -8,6 +10,7 @@ from utils.logger import _log
 UPLOAD_FOLDER = '/tmp'
 
 app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -34,6 +37,7 @@ def upload_file():
     # save file
     _f_ext = file.filename.split(os.extsep)[-1]
 
+    # if file is valid
     if file and (_f_ext in exts):
       print(f"{_f_ext} in {exts}")
       filename = secure_filename(file.filename)

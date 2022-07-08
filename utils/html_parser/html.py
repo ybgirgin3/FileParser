@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 
 def html(fp):
+  "read html and return it's content"
   with open(fp) as fp:
     soup = BeautifulSoup(fp, features="html.parser")
 

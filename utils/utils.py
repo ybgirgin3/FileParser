@@ -1,29 +1,28 @@
-from collections import Counter
+
 import os
-from ._types import reading_types
-from ._txt_parse import _txt_read
-from ._pdf_parse import _pdf_read
+from html_parser.html import html
+from image_parser.image import image
+from pdf_parser.pdf import pdf
+from text_parser.text import text
 
 
-def _find_type(fn: str) -> str:
-  ext = os.path.splitext(fn)[-1]
 
-  if ext in reading_types.keys():
-    read_type = reading_types[ext]
+allowed_extensions = {
+  'pdf': pdf,
+  'jpeg': image, 'png': image, 'jpg': image,
+  'html': html,
+  'txt': text
+}
 
-  return read_type, ext
+exts, vals = allowed_extensions.keys(), allowed_extensions.values()
+
+def _find_ext_n_run(fp): 
+  ext = fp.split(os.extsep)[-1]
+  if ext in exts:
+    return allowed_extensions[ext](fp)
+    
 
 
-def utils_main(filename):
-  # find file ext
-  rt, ext = _find_type(filename)
-  print("rt: ", rt, "ext: ", ext)
-
-  _ret = lambda x: Counter(x)(open(filename, rt))
-  print("ret:", _ret)
-
-  return {
-      "content": _ret,
-      "file_extension": ext,
-      "read_type": rt
-  }
+# if __name__ == '__main__':
+#  import sys
+#  print(_find_ext_n_run(sys.argv[1]))

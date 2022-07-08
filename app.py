@@ -1,42 +1,47 @@
-from flask import Flask, render_template, request, redirect
-from werkzeug.utils import secure_filename
-import tempfile
 import os
+from flask import Flask, flash, request, redirect, render_template
+from werkzeug.utils import secure_filename
 
-
-# local
-from utils.utils import _find_ext_n_run
+from utils.utils import _find_ext_n_run, exts
 from utils.logger import _log
 
+UPLOAD_FOLDER = '/tmp'
 
 app = Flask(__name__)
-# app.config['UPLOAD_FOLDER'] = tempfile.gettempdir() 
-#app.config['UPLOAD_FOLDER'] = '/tmp/' 
-app.config['UPLOAD_FOLDER'] = 'uploads' 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-@app.route('/', methods = ['GET', 'POST'])
-def index():
-  # save file
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
   if request.method == 'POST':
-    if request.file:
-      file = request.files['file']
+    # if program has skill to upload file
+    if 'file' not in request.files:
+      msg = 'Not file part'
+      flash(msg)
+      _log(msg, 'warning')
+      return redirect(request.url)
 
-      if file.filename == '':
-        _log('Image MUST have a file name', 'danger')
-        redirect(request.url)
+    # get file
+    file = request.files['file']
 
-      fn = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-      file.save(fn)
+    # if user not select a file
+    if file.filename == '':
+      msg = 'No selected file'
+      flash(msg)
+      _log(msg, 'warning')
+      return redirect(request.url)
 
-      # give user the info
-      _log('file uploaded successfully to tempdir', 'info')
+    # save file
+    _f_ext = file.filename.split(os.extsep)[-1]
 
-      # extract from file
-      return _find_ext_n_run(fn)
+    if file and (_f_ext in exts):
+      print(f"{_f_ext} in {exts}")
+      filename = secure_filename(file.filename)
+      fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+      file.save(fp)
+      _log(f"file saved to {app.config['UPLOAD_FOLDER']} ", 'info')
+      return _find_ext_n_run(fp)
   return render_template('upload.html')
-
-
 
   
 if __name__ == '__main__':

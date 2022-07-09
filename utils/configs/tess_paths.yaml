@@ -1,0 +1,9 @@
+'darwin':
+  - '/opt/homebrew/bin/tesseract'
+  - 'usr/bin/tesseract'
+
+'linux':
+  - 'usr/bin/tesseract'
+
+'windows':
+  - '..'

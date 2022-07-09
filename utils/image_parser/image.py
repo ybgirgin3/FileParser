@@ -4,9 +4,9 @@ import platform
 
 # default (?) tesseract paths
 tess_path = {
-  'darwin': '/opt/homebrew/bin/tesseract',
-  'linux': 'usr/bin/tesseract',
-  'windows': '..'
+  'Darwin': ['/opt/homebrew/bin/tesseract', 'usr/bin/tesseract'],
+  'Linux': ['usr/bin/tesseract'],
+  'Windows': ['..']
 }
 
 # get system type
@@ -14,10 +14,31 @@ _os = platform.system()
 
 def image(fp):
   "read image and extract text"
-  _pts_ocr = tess_path[_os]
-  pts.tesseract_cmd = _pts_ocr
+  if _os in tess_path.keys():
+    for p in tess_path[_os]:
+      try:
+        pts.tesseract_cmd = p
 
-  img = Image.open(fp)
-  text = pts.image_to_string(img)
+        img = Image.open(fp)
+        text = pts.image_to_string(img)
+        return text
 
-  return text
+      except Exception as e:
+        print(e)
+  
+  
+  
+  # if _os in tess_path.keys():
+    # vals = tess_path[_os]
+    # try:
+    #   for p in vals:
+    #     _pts_ocr = p
+    #   pts.tesseract_cmd = _pts_ocr
+
+    #   img = Image.open(fp)
+    #   text = pts.image_to_string(img)
+
+    #   return text
+    # except Exception as e:
+    #   raise(e)
+  

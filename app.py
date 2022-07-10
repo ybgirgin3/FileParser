@@ -7,7 +7,10 @@ from werkzeug.utils import secure_filename
 from utils.utils import find_ext_n_run, extensions
 from utils.logger import log
 
-UPLOAD_FOLDER = '/tmp'
+import tempfile
+
+#UPLOAD_FOLDER = '/tmp'
+UPLOAD_FOLDER = tempfile.gettempdir()
 
 app = Flask(__name__)
 CORS(app)

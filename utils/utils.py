@@ -21,8 +21,9 @@ extensions, vals = allowed_extensions.keys(), allowed_extensions.values()
 
 def find_ext_n_run(fp):
   """
-    find extension of file, calls the specific function, calls `counter` function
-    gets count of word and returns as a dict
+    find extension of file, calls the specific function,
+    calls `counter` function to get count of words
+    and returns as a dict
   """
 
   ext = fp.split(os.extsep)[-1]

@@ -1,4 +1,3 @@
-#from utils.html_parser import html
 from utils.html import html
 from utils.image import image
 from utils.pdf import pdf

@@ -9,7 +9,6 @@ from utils.logger import log
 
 import tempfile
 
-#UPLOAD_FOLDER = '/tmp'
 UPLOAD_FOLDER = tempfile.gettempdir()
 
 app = Flask(__name__)

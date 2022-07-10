@@ -1,9 +1,9 @@
-
-from utils.html_parser.html import html
-from utils.image_parser.image import image
-from utils.pdf_parser.pdf import pdf
-from utils.text_parser.text import text
-from utils.logger import _log
+#from utils.html_parser import html
+from utils.html import html
+from utils.image import image
+from utils.pdf import pdf
+from utils.text import text
+from utils.logger import log
 from utils.count import counter
 import os
 
@@ -16,22 +16,21 @@ allowed_extensions = {
   'txt': text
 }
 
-exts, vals = allowed_extensions.keys(), allowed_extensions.values()
+extensions, vals = allowed_extensions.keys(), allowed_extensions.values()
 
-def _find_ext_n_run(fp): 
+
+def find_ext_n_run(fp):
   """
     find extension of file, calls the specific function, calls `counter` function
     gets count of word and returns as a dict
   """
 
   ext = fp.split(os.extsep)[-1]
-  if ext in exts:
-    _log(f"{ext} file found", 'info')
-    if ext in ('jpeg', 'png', 'jpg'):
-      func_name = allowed_extensions[ext]
-      _content = func_name(fp, tess_paths).split()
-    else:
-      _content = func_name(fp).split()
+  if ext in extensions:
+    log(f"{ext} file found", 'info')
+    if ext in ('jpeg', 'png', 'jpg'): _fp = fp, tess_paths
+    else: _fp = fp
+    _content = allowed_extensions[ext](_fp).split()
     _count = counter(_content)
 
     ret = {
@@ -40,7 +39,6 @@ def _find_ext_n_run(fp):
     }
 
     return ret
-    
 
 # if __name__ == '__main__':
 #  import sys

@@ -1,11 +1,11 @@
 import os
-from flask import Flask, flash, request, redirect, render_template
+from flask import Flask, request, redirect, render_template
 from flask_cors import CORS
 
 from werkzeug.utils import secure_filename
 
-from utils.utils import _find_ext_n_run, exts
-from utils.logger import _log
+from utils.utils import find_ext_n_run, extensions
+from utils.logger import log
 
 UPLOAD_FOLDER = '/tmp'
 
@@ -20,33 +20,31 @@ def upload_file():
     # if program has skill to upload file
     if 'file' not in request.files:
       msg = 'Not file part'
-      flash(msg)
-      _log(msg, 'warning')
+      log(msg, 'warning')
       return redirect(request.url)
 
-    # get file
+    # get file
     file = request.files['file']
 
     # if user not select a file
     if file.filename == '':
       msg = 'No selected file'
-      flash(msg)
-      _log(msg, 'warning')
+      log(msg, 'warning')
       return redirect(request.url)
 
     # save file
     _f_ext = file.filename.split(os.extsep)[-1]
 
     # if file is valid
-    if file and (_f_ext in exts):
-      print(f"{_f_ext} in {exts}")
+    if file and (_f_ext in extensions):
+      log(f"{_f_ext} in {extensions}", 'info')
       filename = secure_filename(file.filename)
       fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
       file.save(fp)
-      _log(f"file saved to {app.config['UPLOAD_FOLDER']} ", 'info')
-      return _find_ext_n_run(fp)
+      log(f"file saved to {app.config['UPLOAD_FOLDER']} ", 'info')
+      return find_ext_n_run(fp)
   return render_template('upload.html')
 
-  
+
 if __name__ == '__main__':
   app.run(debug=True)

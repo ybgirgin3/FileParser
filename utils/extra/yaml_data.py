@@ -1,6 +1,6 @@
 import yaml
 
-def _yaml_parser(fp=None):
+def yaml_parser(fp=None):
   return yaml.safe_load(open(fp)) #if fp is not None else ""
 
 

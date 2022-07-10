@@ -2,15 +2,16 @@ from PIL import Image
 from pytesseract import pytesseract as pts
 import platform
 from utils.extra.case_derivates import derivates
-from utils.extra.yaml_data import _yaml_parser 
+from utils.extra.yaml_data import yaml_parser 
 
 # get system type
 _os = platform.system()
 _os = derivates(_os) # list 
 
 
-def image(fp, tess_path: dict):
-  tess_path = _yaml_parser(tess_path)
+def image(_arg: dict):
+  fp, tess_path = _arg
+  tess_path = yaml_parser(tess_path)
   "read image and extract text"
   for deriv in _os:
     if deriv in tess_path.keys():

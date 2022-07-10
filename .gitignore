@@ -131,3 +131,4 @@ dmypy.json
 # local
 temp/
 trash/
+.DS_Store

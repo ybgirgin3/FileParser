@@ -10,43 +10,27 @@ from utils.logger import log
 import tempfile
 
 UPLOAD_FOLDER = tempfile.gettempdir()
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import HTMLResponse
 
-app = Flask(__name__)
-CORS(app)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-  if request.method == 'POST':
-    # if program has skill to upload file
-    if 'file' not in request.files:
-      msg = 'Not file part'
-      log(msg, 'warning')
-      return redirect(request.url)
-
-    # get file
-    file = request.files['file']
-
-    # if user not select a file
-    if file.filename == '':
-      msg = 'No selected file'
-      log(msg, 'warning')
-      return redirect(request.url)
-
-    # save file
-    _f_ext = file.filename.split(os.extsep)[-1]
-
-    # if file is valid
-    if file and (_f_ext in extensions):
-      log(f"{_f_ext} in {extensions}", 'info')
-      filename = secure_filename(file.filename)
-      fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-      file.save(fp)
-      log(f"file saved to {app.config['UPLOAD_FOLDER']} ", 'info')
-      return find_ext_n_run(fp)
-  return render_template('upload.html')
+app = FastAPI()
 
 
-if __name__ == '__main__':
-  app.run(debug=True)
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile | None = None):
+  if not file:
+    return {"message": "No upload file sent"}
+  else:
+    return {"filename": file.filename}
+
+@app.get("/")
+async def main():
+    content = """
+<body>
+<form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+<input name="files" type="file" multiple>
+<input type="submit">
+</form>
+</body>
+    """
+    return HTMLResponse(content=content)

@@ -1,5 +1,5 @@
 from PyPDF2 import PdfReader
-from utils.count import counter
+
 
 def pdf(fp):
   "parse pdf and return it's content"

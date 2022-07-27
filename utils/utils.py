@@ -2,6 +2,8 @@ from utils.html import html
 from utils.image import image
 from utils.pdf import pdf
 from utils.text import text
+from utils.doc import doc
+# from utils.pages import pages
 from utils.logger import log
 from utils.count import counter
 import os
@@ -12,7 +14,10 @@ allowed_extensions = {
   'pdf': pdf,
   'jpeg': image, 'png': image, 'jpg': image,
   'html': html,
-  'txt': text
+  'txt': text,
+  'docx': doc,
+  # 'pages': pages # experimental
+
 }
 
 extensions, vals = allowed_extensions.keys(), allowed_extensions.values()
@@ -30,7 +35,10 @@ def find_ext_n_run(fp):
     log(f"{ext} file found", 'info')
     if ext in ('jpeg', 'png', 'jpg'): _fp = fp, tess_paths
     else: _fp = fp
+    print("fp: ", _fp)
     _content = allowed_extensions[ext](_fp).split()
+    print("content:", _content)
+
     _count = counter(_content)
 
     ret = {
